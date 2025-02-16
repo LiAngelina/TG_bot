@@ -6,6 +6,6 @@ cd TG_bot
 ``
 
 ``
-pip install - r requirements.txt
+pip install - r requirements.txt 
 python bot.py
 ``
