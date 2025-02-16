@@ -12,7 +12,7 @@ dp = Dispatcher()
 #Основная клавиатура
 main_keyboard = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text="Привет🖐"), KeyboardButton(text="Помощь")]
+        [KeyboardButton(text="Привет!"), KeyboardButton(text="Помощь")]
     ],
     resize_keyboard=True
 )
