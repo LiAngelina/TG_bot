@@ -12,7 +12,7 @@ dp = Dispatcher()
 #Основная клавиатура
 main_keyboard = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text="Hi!🖐"), KeyboardButton(text="Помощь")]
+        [KeyboardButton(text="Привет🖐"), KeyboardButton(text="Помощь")]
     ],
     resize_keyboard=True
 )
@@ -27,11 +27,11 @@ inline_keyboard = InlineKeyboardMarkup(
 
 @dp.message(Command("start"))
 async def start(message: types.Message):
-        await message.answer("Hi! Я тестовый бот <b>тест</b>", reply_markup=main_keyboard)
+        await message.answer("Hi! Я твой тестовый бот=)", reply_markup=main_keyboard)
 
 @dp.message(lambda message: message.text == "Привет!")
 async def hello(message: types.Message):
-        await message.answer("Hi! Как дела? 🤭", reply_markup=inline_keyboard)
+        await message.answer("Приветствую! Как дела? 🤭", reply_markup=inline_keyboard)
 
 async def main():
         await dp.start_polling(bot)
