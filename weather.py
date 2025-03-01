@@ -1,23 +1,32 @@
 import aiohttp
+from api import API_KEY, WEATHER_URL
 
-API_KEY = "41dc09da6aae7e0f82a4665d15f8a901"
-WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather"
+CITIES = {
+    "Казахстан": ["Алматы", "Астана"],
+    "Россия": ["Москва"]
+}
 
-async def get_weather():
-    params = { 
-        "q": "Алматы",  
+async def get_weather(city: str = "Алматы"):
+    """Получает погоду для указанного города."""
+    params = {
+        "q": city,  # Теперь город передается корректно
         "appid": API_KEY,
         "units": "metric",
         "lang": "ru"
     }
     async with aiohttp.ClientSession() as session:
         async with session.get(WEATHER_URL, params=params) as response:
-            data = await response.json()  
-            if response.status == 200:  
+            data = await response.json()
+            if response.status == 200:
                 return (
-                    f"Температура в Алматы: {data['main']['temp']}°C\n"
-                    f"Ветер: {data['wind']['speed']} м/с\n"
-                    f"Погода: {data['weather'][0]['description'].capitalize()}"
+                    f"🌍 Погода в {city}:\n"  # Теперь правильно отображается выбранный город
+                    f"🌡 Температура: {data['main']['temp']}°C\n"
+                    f"💨 Ветер: {data['wind']['speed']} м/с\n"
+                    f"☁️ {data['weather'][0]['description'].capitalize()}"
                 )
             else:
-                return "Ошибка. Не удалось получить погоду для Алматы."
+                return f"❌ Ошибка: Не удалось получить погоду для {city}."
+
+def get_available_cities():
+    """Возвращает список доступных городов по странам."""
+    return CITIES
