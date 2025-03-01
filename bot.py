@@ -4,6 +4,7 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.types import(ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton)
 from aiogram.filters import Command
 from aiogram.client.default import DefaultBotProperties
+from weather import get_weather
 from api import TOKEN
 
 #Создание объектов: бот и диспетчер
@@ -26,16 +27,15 @@ inline_keyboard = InlineKeyboardMarkup(
         [InlineKeyboardButton(text="Рандомное число", callback_data="random")]
     ]
 )
-
-@dp.callback_query_handler()
-async def callback_handelr(callback: types.CallbackQuery):
+# тут было изменение 31 строка в скобках
+@dp.callback_query(lambda c: c.data in ["start", "help", "random"])
+async def callback_handler(callback: types.CallbackQuery):
     if callback.data == "start":
         await callback.message.answer("Напиши /start, что бы начать работу с ботом")
     if callback.data == "help":
         await callback.message.answer("Альтернативная помощь или напиши /help")
     if callback.data == "random":
-        await callback.message.answer("Хочешь рандомное число? Напиши: /random")    
-
+        await callback.message.answer("Хочешь рандомное число? Напиши: /random")
 
 
 @dp.message(Command("start"))
@@ -43,10 +43,10 @@ async def start(message: types.Message):
         await message.answer("Hi! Я твой тестовый бот=)", reply_markup=main_keyboard)
 
 @dp.message(Command("random"))
-async def random(message: types.Message):
+async def random_command(message: types.Message):
         number = random.randint(1,100)
         await message.answer(f"Случайное число: {number}")
-    
+
 @dp.message(Command("help"))
 async def help_command(message: types.Message):
         command_text = (
@@ -54,12 +54,13 @@ async def help_command(message: types.Message):
             "/start - Начать работу с ботом\n"
             "/help - Показывает список команд\n"
             "/random - Случайное число"
-            
         )
         await message.answer(command_text)
-    
 
-
+@dp.message(Command("weather"))
+async def weather_command(message: types.Message):
+    weather_info = await get_weather()
+    await message.reply(weather_info)
 
 @dp.message(lambda message: message.text == "Привет!")
 async def hello(message: types.Message):
